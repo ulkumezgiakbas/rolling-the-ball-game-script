@@ -1,0 +1,19 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DestroyObject : MonoBehaviour
+{
+   public void OnCollisionEnter(Collision hit)
+   {
+      if (hit.gameObject.CompareTag("Untagged")|| hit.gameObject.CompareTag("Obstacles"))
+      {
+         hit.gameObject.SetActive(false);
+      }
+   }
+}
+
+
+//this script for particle system, when the amount of particles in the particle system is high, 
+//the mobile device gets overloaded, so I made a place under the playground to destroy the particles
