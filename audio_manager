@@ -1,0 +1,39 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Sounds : MonoBehaviour
+{
+    public AudioSource buttonSource;
+    public AudioSource blowUpSource;
+    public AudioSource CashSource;
+    public AudioSource CompleteSource;
+    public AudioSource HitSource;
+
+    public AudioClip buttonClip;
+    public AudioClip blowUpClip;
+    public AudioClip cashClip;
+    public AudioClip completeClip;
+    public AudioClip hitClip;
+
+    public void ButtonSound()
+    {
+        buttonSource.PlayOneShot(buttonClip);
+    }
+    public void BlowUpSound()
+    {
+        blowUpSource.PlayOneShot(blowUpClip,0.3f);
+    }
+    public void cashSound()
+    {
+        CashSource.PlayOneShot(cashClip);
+    }
+    public void CompleteSound()
+    {
+        CompleteSource.PlayOneShot(completeClip);
+    }
+    public void HitSound()
+    {
+        HitSource.PlayOneShot(hitClip);
+    }
+}
