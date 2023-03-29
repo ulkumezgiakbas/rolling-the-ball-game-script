@@ -1,0 +1,110 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using GoogleMobileAds.Api;
+
+public class AdManager : MonoBehaviour
+{
+    public InterstitialAd interstitial;
+    public RewardedAd RewardedAd;
+
+    public UIManager uimanager;
+
+
+    public void RequestInterstitial()
+    {
+        // UNITY_ANDROID
+        string adUnitId = "ca-app-pub-9029840703510610/9737832565";
+        // UNITY_IPHONE
+         adUnitId = "ca-app-pub-9029840703510610/2789280838";
+
+         adUnitId = "unexpected_platform";
+
+
+        // Initialize an InterstitialAd.
+        this.interstitial = new InterstitialAd(adUnitId);
+        // Create an empty ad request.
+        AdRequest request = new AdRequest.Builder().Build();
+        // Load the interstitial with the request.
+        this.interstitial.LoadAd(request);
+    }
+
+    public void RequestRewardedAd()
+    {
+//UNITY_ANDROID
+        string  adUnitId = "ca-app-pub-9029840703510610/1643720128";
+//UNITY_IPHONE
+                adUnitId = "ca-app-pub-9029840703510610/5156972611";
+//UNKNOWN
+        
+
+
+
+        this.RewardedAd = new RewardedAd(adUnitId);
+
+
+        // Called when an ad is shown.
+        this.RewardedAd.OnAdOpening += HandleRewardedAdOpening;
+        // Called when the user should be rewarded for interacting with the ad.
+        this.RewardedAd.OnUserEarnedReward += HandleUserEarnedReward;
+        // Called when the ad is closed.
+        this.RewardedAd.OnAdClosed += HandleRewardedAdClosed;
+
+        // Create an empty ad request.
+        AdRequest request = new AdRequest.Builder().Build();
+        // Load the rewarded ad with the request.
+        this.RewardedAd.LoadAd(request);
+    }
+
+    public void ShowInterstitial()
+    {
+        if (PlayerPrefs.GetInt("Noads") == 0)
+        {
+            if (interstitial.IsLoaded())
+            {
+                interstitial.Show();
+            }
+        }
+    }
+
+    public void ShowRewardedAd()
+    {
+        if (this.RewardedAd.IsLoaded())
+        {
+            this.RewardedAd.Show();
+        }
+    }
+    
+    public void HandleRewardedAdOpening(object sender, EventArgs args)
+    {
+        MonoBehaviour.print("HandleRewardedAdOpening event received");
+    }
+    
+    public void HandleUserEarnedReward(object sender, Reward args)
+    {
+        CoinCalculator(400);
+        uimanager.StartCoroutine("AfterRewardButton");
+    }
+
+    public void HandleRewardedAdClosed(object sender, EventArgs args)
+    {
+        MonoBehaviour.print("HandleRewardedAdClosed event received");
+    }
+    public void CoinCalculator(int money)
+    {
+        if (PlayerPrefs.HasKey("moneyy"))
+        {
+            int oldScore = PlayerPrefs.GetInt("moneyy");
+            PlayerPrefs.SetInt("moneyy", oldScore + money);
+        }
+        else PlayerPrefs.SetInt("moneyy",0);
+    }
+    public void OnDestroy() //for ads
+    {
+        if (interstitial != null)
+        {
+            interstitial.Destroy();
+        }
+    }
+}
