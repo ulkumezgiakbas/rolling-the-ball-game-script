@@ -1,0 +1,272 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.PlayerLoop;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
+
+public class UIManager : MonoBehaviour
+{
+   public Sounds sounds;
+   
+   public TextMeshProUGUI CoinText;
+   public Image whiteeffectimage;
+   private int effectcontrol = 0;
+   public Image FillRateImage;
+   public GameObject Player;
+   public GameObject FinishLine;
+
+   public GameObject settings_Open;
+   public GameObject settings_Close;
+   public GameObject background;
+
+   public GameObject sound_On;
+   public GameObject sound_Off;
+
+   public GameObject vibration_On;
+   public GameObject vibration_Off;
+
+   public GameObject iap;
+   public GameObject info;
+   
+   public Animator LayoutAnimator;
+   public GameObject hand;
+   public GameObject touch_text;
+   public GameObject noads;
+   public GameObject shop;
+
+   public GameObject RestartScreen;
+   public GameObject finishScreen;
+   public GameObject blackbackground;
+   public GameObject complete;
+   public GameObject coin;
+   public GameObject rewarded;
+   public GameObject nothy;
+
+   public GameObject achievedCoin;
+   public GameObject nextLevel;
+   public Text achievedText;
+   
+   public void Start()
+   {
+      if (PlayerPrefs.HasKey("Sound") == false)
+      {
+         PlayerPrefs.SetInt("Sound",1);
+      }
+
+      if (PlayerPrefs.HasKey("Vibration") == false)
+      {
+         PlayerPrefs.SetInt("Vibration",1);
+      }
+      
+      if (PlayerPrefs.HasKey("Noads") == false)
+      {
+         PlayerPrefs.SetInt("Noads", 0);
+      }
+
+      if (PlayerPrefs.GetInt("Noads") == 1)
+      {
+         NoadsRemove();
+      }
+      CoinTextUpdate();
+   }
+
+   public void Update()
+   {
+      FillRateImage.fillAmount = ((Player.transform.position.z*100) / (FinishLine.transform.position.z)) / 100;
+   }
+
+   public void FirstTouch()
+   {
+      hand.SetActive(false);
+      touch_text.SetActive(false);
+      noads.SetActive(false);
+      shop.SetActive(false);
+      settings_Open.SetActive(false);
+      settings_Close.SetActive(false);
+      background.SetActive(false);
+      sound_On.SetActive(false);
+      sound_Off.SetActive(false);
+      vibration_On.SetActive(false);
+      vibration_Off.SetActive(false);
+      iap.SetActive(false);
+      info.SetActive(false);
+   }
+
+   public void NoadsRemove()
+   {
+      noads.SetActive(false);
+   }
+   public IEnumerator AfterRewardButton()
+   {
+      achievedCoin.SetActive(true);
+      achievedText.gameObject.SetActive(true);
+      rewarded.SetActive(false);
+      nothy.SetActive(false);
+      for (int i = 0; i < 401; i += 4)
+      {
+         achievedText.text = "+" + i.ToString();
+         yield return new WaitForSeconds(0.0001f);
+      }
+      yield return new WaitForSecondsRealtime(1f);
+      nextLevel.SetActive(true);
+   }
+
+   public void CoinTextUpdate()
+   {
+      CoinText.text = PlayerPrefs.GetInt("moneyy").ToString();
+   }
+
+   public void RestartButtonActive()
+   {
+      RestartScreen.SetActive(true);
+   }
+
+   public void RestartScene()
+   {
+      Variables.firsttouch = 0;
+      Time.timeScale = 1f;
+      SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+   }
+
+   public void NextScene()
+   {
+      Variables.firsttouch = 0;
+      Time.timeScale = 1f;
+      SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+   }
+
+   public void FinishScreen()
+   {
+      StartCoroutine("FinishLaunch");
+   }
+
+   public IEnumerator FinishLaunch()
+   {
+      Time.timeScale = 0.3f;
+      finishScreen.SetActive(true);
+      blackbackground.SetActive(true);
+      complete.SetActive(true);
+      sounds.CompleteSound();
+      coin.SetActive(true);
+      rewarded.SetActive(true);
+      nothy.SetActive(true);
+      yield return new WaitForSeconds(1f);
+   }
+
+   public void Privacy()
+   {
+      Application.OpenURL("link");
+   }
+
+   public void TermOfUse()
+   {
+      Application.OpenURL("link");
+   }
+   
+   public void Settings_Open()
+   {
+      settings_Open.SetActive(false);
+      settings_Close.SetActive(true);
+      LayoutAnimator.SetTrigger("slide_in");
+      
+      if (PlayerPrefs.GetInt("Sound") == 1)
+      {
+         sound_On.SetActive(true);
+         sound_Off.SetActive(false);
+         AudioListener.volume = 1;
+      }
+      else if (PlayerPrefs.GetInt("Sound")== 2)
+      {
+         settings_Open.SetActive(true);
+         settings_Close.SetActive(false);
+         AudioListener.volume = 0;
+      }
+      
+      
+      if (PlayerPrefs.GetInt("Vibration") == 1)
+      {
+         vibration_On.SetActive(true);
+         vibration_Off.SetActive(false);
+      }   
+      else if (PlayerPrefs.GetInt("Vibration") == 2)
+      {
+         vibration_On.SetActive(false);
+         vibration_Off.SetActive(true);
+      }   
+      
+   }
+   public void Settings_Close()
+   {
+      settings_Open.SetActive(true);
+      settings_Close.SetActive(false);
+      LayoutAnimator.SetTrigger("slide_out");
+   }
+
+   public void Sound_On()
+   {
+      sound_On.SetActive(false);
+      sound_Off.SetActive(true);
+      AudioListener.volume = 0;
+      PlayerPrefs.SetInt("Sound",2);
+   }
+
+   public void Sound_Off()
+   {
+      sound_On.SetActive(true);
+      sound_Off.SetActive(false);
+      AudioListener.volume = 1;
+      PlayerPrefs.SetInt("Sound",1);
+   }
+
+   public void Vibration_On()
+   {
+      vibration_On.SetActive(false);
+      vibration_Off.SetActive(true);
+      PlayerPrefs.SetInt("Vibration",2);
+   }
+
+   public void Vibration_Off()
+   {
+      vibration_On.SetActive(true);
+      vibration_Off.SetActive(false);
+      PlayerPrefs.SetInt("Vibration",1);
+   }
+  
+   public IEnumerator WhiteEffect()
+   {
+      whiteeffectimage.gameObject.SetActive(true);
+      while (effectcontrol == 0)
+      {
+         yield return new WaitForSeconds(0.1f);
+         whiteeffectimage.color += new Color(0, 0, 0, 0.1f);
+         if (whiteeffectimage.color == new Color(whiteeffectimage.color.r, whiteeffectimage.color.g, whiteeffectimage.color.b, 1))
+         {
+            effectcontrol = 1;
+         }
+         
+      }
+
+      while (effectcontrol == 1)
+      {
+         yield return new WaitForSeconds(0.00001f);
+         whiteeffectimage.color -= new Color(0, 0, 0, 0.1f);
+         if (whiteeffectimage.color == new Color(whiteeffectimage.color.r, whiteeffectimage.color.g, whiteeffectimage.color.b, 0))
+         {
+            effectcontrol = 2;
+         }
+         
+      }
+
+      if (effectcontrol == 2) //random
+      {
+         Debug.Log("done");
+      }
+   }
+}
