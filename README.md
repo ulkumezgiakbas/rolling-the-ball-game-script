@@ -5,6 +5,8 @@ The game has 5 levels, 1 menu and 1 exit screen.
 In-game purchases:
 - 3 coin packs
 - 4 particles
+- Also you can find the game video : https://www.linkedin.com/feed/update/urn:li:activity:7046841751147323392/
+
 
 ![2](https://user-images.githubusercontent.com/126782676/228556178-ee09d01d-8476-4ab6-9df3-2170087f390c.jpg)
 ![3](https://user-images.githubusercontent.com/126782676/228556184-5b1c0c20-66f3-4d4f-98d7-ad9544ee9bb0.jpg)
