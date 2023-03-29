@@ -1,0 +1,33 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using GoogleMobileAds.Api;
+
+public class Banner : MonoBehaviour
+{
+    private BannerView BannerView;
+
+    public void Start()
+    {
+        MobileAds.Initialize(initStatus => { });
+        if (PlayerPrefs.HasKey("Noads") == false)
+        {
+            PlayerPrefs.SetInt("Noads", 0);
+        }
+        if (PlayerPrefs.GetInt("Noads") == 0)
+        {
+            RequestBanner();
+        }
+    }
+
+    private void RequestBanner()
+    {
+        //unity android
+        string adUnitId = "ca-app-pub-3940256099942544/6300978111";
+        
+        //crate a banner 320x50 bottom of the screen
+        this.BannerView = new BannerView(adUnitId, AdSize.Banner, AdPosition.Bottom);
+        AdRequest request = new AdRequest.Builder().Build();
+        this.BannerView.LoadAd(request);
+    }
+}
