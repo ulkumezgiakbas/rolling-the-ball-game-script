@@ -2,9 +2,12 @@
 
 I made a Hyper Casual Ball Game. Here you can find all the scripts I wrote and some in-game screenshots.
 The game has 5 levels, 1 menu and 1 exit screen.
+
 In-game purchases:
 - 3 coin packs
 - 4 particles
+
+
 - Also you can find the game video : https://www.linkedin.com/feed/update/urn:li:activity:7046841751147323392/
 
 
